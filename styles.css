@@ -16,7 +16,7 @@
 
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 280px;
   min-height: 100vh;
   background: var(--page);
   color: var(--ink);
@@ -239,6 +239,20 @@ h1, h2 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", 
 .button-primary:hover { background: var(--green-dark); }
 .button-quiet { border: 1px solid var(--line); background: white; color: #5e6a63; }
 .button-quiet:hover { background: #f8faf7; }
+.account-button { min-height: 36px; margin-right: 14px; padding: 0 12px; font-size: 10px; white-space: nowrap; }
+.auth-panel { width: min(560px, 100%); margin: 0 auto; padding: 25px; }
+.auth-form { display: grid; gap: 15px; }
+.auth-submit { width: 100%; margin-top: 3px; }
+.auth-submit:disabled { cursor: not-allowed; opacity: .6; }
+.auth-switch { margin: 19px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
+.text-button { padding: 0; border: 0; background: none; color: var(--green-dark); font-size: inherit; font-weight: 750; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.auth-message { margin: 12px 0 0; color: var(--green-dark); font-size: 12px; line-height: 1.55; }
+.auth-message:empty { display: none; }
+.auth-message.is-error { color: #9e3f36; }
+.auth-setup-note { margin: 15px 0 0; padding: 11px 12px; border: 1px solid #e8dfc9; border-radius: 9px; background: #fbf8f0; color: #716447; font-size: 11px; line-height: 1.55; }
+.auth-skip { width: 100%; margin-top: 13px; }
+.profile-email { margin: 0 0 17px; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.form-actions { flex-wrap: wrap; }
 
 .hero-example {
   align-self: center;
@@ -322,6 +336,11 @@ h1, h2 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", 
 .tool-count { color: #89938e; font-size: 10px; font-weight: 600; }
 
 .tool-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.tool-grid > .shop-tool { order: -5; }
+.tool-grid > .emi-tool { order: -4; }
+.tool-grid > .percentage-tool { order: -3; }
+.tool-grid > .fuel-tool { order: -2; }
+.tool-grid > .property-tool { order: -1; }
 .tool-card {
   position: relative;
   display: flex;
@@ -349,6 +368,7 @@ h1, h2 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", 
 .dates-tool .tool-icon, .age-tool .tool-icon { background: #eaf1f8; color: #52779c; }
 .converter-tool .tool-icon { background: #f1ecf8; color: #7d679f; }
 .fuel-tool .tool-icon { background: #fcf0e7; color: #b56d39; }
+.electricity-tool .tool-icon { background: #fff4d8; color: #98711b; }
 .split-tool .tool-icon { background: #f1ecf8; color: #7d679f; }
 .tool-tag { position: absolute; top: 24px; left: 57px; color: #929a95; font-size: 8px; font-weight: 800; letter-spacing: .9px; }
 .tool-card strong { margin-bottom: 4px; font: 700 13px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
@@ -401,6 +421,11 @@ h1, h2 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", 
 .helper-text { margin: 14px 0 0; color: #69766d; font-size: 10px; line-height: 1.6; }
 
 .result-panel { position: relative; min-height: 370px; padding: 24px; background: linear-gradient(145deg, #fff 45%, #f8fbf7); }
+.result-panel.result-reveal, .basic-display.result-reveal { border-color: #93b89f; animation: result-reveal .65s ease-out both; }
+@keyframes result-reveal {
+  from { opacity: .7; transform: translateY(14px); box-shadow: 0 0 0 rgba(38,63,49,0); }
+  to { opacity: 1; transform: translateY(0); box-shadow: 0 12px 30px rgba(38,63,49,.1); }
+}
 .result-topline { display: flex; align-items: center; justify-content: space-between; }
 .result-label { color: #829087; font-size: 9px; font-weight: 800; letter-spacing: 1.2px; }
 .icon-button { display: grid; width: 30px; height: 30px; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: white; color: #65746b; font-size: 16px; cursor: pointer; }
@@ -415,6 +440,9 @@ h1, h2 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", 
 .result-note { display: flex; gap: 9px; margin-top: 18px; padding: 11px; border-radius: 9px; background: #f2f7f2; color: #7c8980; font-size: 9px; line-height: 1.55; }
 .result-note > span { display: grid; flex: 0 0 15px; width: 15px; height: 15px; place-items: center; border-radius: 50%; background: #dcebe0; color: var(--green); font-size: 9px; font-weight: 800; }
 .result-note p { margin: 0; }
+.calculation-details { margin-top: 15px; padding: 12px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: #536158; font-size: 10px; line-height: 1.6; }
+.calculation-details summary { color: var(--green-dark); font-size: 11px; font-weight: 700; cursor: pointer; }
+.calculation-details p { margin: 8px 0 0; }
 .result-footnote { margin-top: 9px; }
 .property-value { display: grid; gap: 7px; margin-top: 16px; padding: 13px; border-radius: 10px; background: #f3f7f2; color: #77827c; font-size: 10px; }
 .property-value strong { color: var(--green-dark); font: 800 18px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
@@ -470,6 +498,7 @@ h1, h2 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", 
 .floating-back:active { transform: translateY(0) scale(.97); }
 .floating-back svg { position: relative; width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
 .floating-back span { position: relative; }
+.mobile-back { display: none; }
 
 @keyframes glass-sheen {
   0%, 62% { left: -60%; }
@@ -504,11 +533,16 @@ h1, h2 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", 
   .mobile-label { display: inline; }
   .nav-icon { flex: 0 0 21px; width: 21px; height: 21px; font-size: 17px; }
   .local-badge { gap: 6px; font-size: 9px; }
+  .account-button { min-height: 32px; margin-right: 7px; padding: 0 9px; font-size: 9px; }
   .badge-desktop { display: none; }
   .badge-mobile { display: inline; }
   .install-button { min-height: 32px; margin-right: 8px; padding: 0 9px; font-size: 9px; }
   .main-content { min-height: calc(100vh - 67px); margin-left: 0; padding: 0 20px 96px; }
   .floating-back { right: 16px; bottom: calc(67px + 14px + env(safe-area-inset-bottom)); }
+  .mobile-back { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; margin-right: 8px; padding: 0; border: 1px solid #dfe9e1; border-radius: 13px; background: #f3f8f3; color: var(--green-dark); cursor: pointer; transition: background .16s ease, transform .16s ease; }
+  .mobile-back:hover { background: #e8f2eb; }
+  .mobile-back:active { transform: scale(.94); }
+  .mobile-back svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
   .topbar { height: 61px; margin-bottom: 24px; }
   .mobile-brand { display: flex; }
   .mobile-brand .brand-mark { width: 29px; height: 29px; border-radius: 9px; font-size: 14px; }
@@ -560,6 +594,11 @@ h1, h2 { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", 
   .hero-card { padding: 20px; }
   .form-actions .button { padding: 0 12px; font-size: 11px; }
   .local-badge { font-size: 8px; }
+  .account-button { margin-right: 5px; padding: 0 7px; font-size: 8px; }
+}
+
+@media (max-width: 300px) {
+  .local-badge { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

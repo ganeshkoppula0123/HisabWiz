@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#287252" />
-    <meta name="description" content="Everyday calculators for money, shops, property, dates, units, and travel." />
+    <meta name="description" content="Everyday calculators for money, shops, home utilities, property, dates, units, and travel." />
     <title>HisabWiz — Everyday Calculators</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -40,10 +40,18 @@
 
       <main class="main-content">
         <header class="topbar">
+          <button class="mobile-back" id="mobileBackButton" type="button" aria-label="Go back" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+          </button>
+          <button class="floating-back" id="backButton" type="button" aria-label="Go back" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+            <span>Back</span>
+          </button>
           <div class="mobile-brand"><span class="brand-mark">H</span><strong>Hisab<span class="brand-accent">Wiz</span></strong></div>
           <div class="topbar-spacer"></div>
+          <button class="button button-quiet account-button" id="accountButton" type="button" data-view-link="login">Sign in</button>
           <button class="button button-quiet install-button" id="installAppButton" type="button" hidden>Install app</button>
-          <span class="local-badge"><span class="status-dot"></span><span class="badge-desktop">Private by design · saved on this device</span><span class="badge-mobile">Private · on device</span></span>
+          <span class="local-badge"><span class="status-dot"></span><span class="badge-desktop">Private by design · saved on this device</span><span class="badge-mobile">On device</span></span>
         </header>
 
         <section class="view active" id="view-home" aria-labelledby="home-title">
@@ -88,8 +96,8 @@
           </section>
 
           <div class="section-heading">
-            <div><p class="eyebrow">MADE FOR REAL LIFE</p><h2>Pick a tool</h2></div>
-            <span class="tool-count">12 useful tools</span>
+            <div><p class="eyebrow">MADE FOR REAL LIFE</p><h2>Popular tools</h2></div>
+            <span class="tool-count">13 useful tools</span>
           </div>
           <div class="tool-grid">
             <button class="tool-card interest-tool" type="button" data-view-link="interest">
@@ -102,14 +110,14 @@
             </button>
             <button class="tool-card shop-tool" type="button" data-view-link="shop">
               <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h16l-1.3-5H5.3L4 8Z"/><path d="M5 8v13h14V8M9 21v-7h6v7M4 8a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0"/></svg></span><span class="tool-tag">SMALL SHOP</span>
-              <strong>Shop & billing</strong><small>Discount, GST, and profit estimate</small><span class="tool-arrow">↗</span>
+              <strong>GST billing</strong><small>GST modes, tax split, and sale total</small><span class="tool-arrow">↗</span>
             </button>
             <button class="tool-card property-tool" type="button" data-view-link="property">
               <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg></span><span class="tool-tag">REAL ESTATE</span>
               <strong>Property calculator</strong><small>Convert land area and estimate value</small><span class="tool-arrow">↗</span>
             </button>
             <button class="tool-card emi-tool" type="button" data-view-link="emi">
-              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h17"/><path d="m7 15 4-4 3 2 6-7M15 6h5v5"/></svg></span><span class="tool-tag">FINANCE AGENT</span>
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h17"/><path d="m7 15 4-4 3 2 6-7M15 6h5v5"/></svg></span><span class="tool-tag">MONEY</span>
               <strong>Loan EMI</strong><small>Estimate monthly payment and interest</small><span class="tool-arrow">↗</span>
             </button>
             <button class="tool-card percentage-tool" type="button" data-view-link="percentage">
@@ -127,6 +135,10 @@
             <button class="tool-card fuel-tool" type="button" data-view-link="fuel">
               <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 21V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v17M3 21h14M7 6h6v5H7zM16 8h2l2 2v6a2 2 0 0 0 4 0v-5l-2-2"/></svg></span><span class="tool-tag">TRAVEL</span>
               <strong>Fuel cost calculator</strong><small>Estimate fuel needed and trip cost</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card electricity-tool" type="button" data-view-link="electricity">
+              <span class="tool-icon" aria-hidden="true">⚡</span><span class="tool-tag">HOME</span>
+              <strong>Electricity bill estimate</strong><small>Estimate energy and fixed charges</small><span class="tool-arrow">↗</span>
             </button>
             <button class="tool-card age-tool" type="button" data-view-link="age">
               <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01"/></svg></span><span class="tool-tag">LIFE & DATES</span>
@@ -192,7 +204,7 @@
               <div class="form-actions"><button class="button button-primary" type="submit">Calculate interest <span>→</span></button><button class="button button-quiet" id="interestReset" type="button">Reset</button></div>
               <p class="helper-text">Formula: Principal × monthly rate ÷ 100 × number of months</p>
             </form>
-            <section class="panel result-panel" aria-live="polite">
+            <section class="panel result-panel" id="interestResultPanel" aria-live="polite">
               <div class="result-topline"><span class="result-label">YOUR RESULT</span><button class="icon-button" id="copyInterest" type="button" aria-label="Copy result" title="Copy result">⧉</button></div>
               <p class="result-caption">Total amount after the period</p><strong class="big-result" id="interestTotal">₹1,48,000</strong>
               <div class="result-divider"></div>
@@ -229,9 +241,11 @@
                 <label class="field"><span>Quantity</span><span class="input-shell"><input id="shopQuantity" type="number" value="1" min="1" step="1" inputmode="numeric" required /></span></label>
                 <label class="field"><span>Discount</span><span class="input-shell"><input id="shopDiscount" type="number" value="0" min="0" max="100" step="0.01" inputmode="decimal" required /><span class="input-suffix">%</span></span></label>
               </div>
-              <label class="field"><span>GST rate</span><span class="input-shell"><input id="shopGst" type="number" value="0" min="0" max="100" step="0.01" inputmode="decimal" required /><span class="input-suffix">%</span></span></label>
+              <label class="field"><span>GST rate</span><span class="input-shell"><select id="shopGst" aria-label="GST rate"><option value="0">0%</option><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option></select></span></label>
+              <label class="field"><span>Price entered is</span><span class="input-shell"><select id="shopGstMode"><option value="exclusive">Before GST (exclusive)</option><option value="inclusive">Includes GST (inclusive)</option></select></span></label>
+              <label class="field"><span>Supply type</span><span class="input-shell"><select id="shopSupplyType"><option value="intra">Within a state (CGST + SGST)</option><option value="inter">Between states (IGST)</option></select></span></label>
               <div class="form-actions"><button class="button button-primary" type="submit">Calculate bill <span>→</span></button><button class="button button-quiet" id="shopReset" type="button">Reset</button></div>
-              <p class="helper-text">GST is estimated on the discounted selling total. Confirm the applicable tax rate for your goods.</p>
+              <p class="helper-text">Illustrative estimate only. Confirm the correct rate, place of supply, and local tax rules before billing.</p>
             </form>
             <section class="panel result-panel" aria-live="polite">
               <div class="result-topline"><span class="result-label">BILL ESTIMATE</span><button class="icon-button" id="copyShop" type="button" aria-label="Copy bill estimate" title="Copy result">⧉</button></div>
@@ -239,8 +253,16 @@
               <div class="result-divider"></div>
               <div class="result-line"><span>Subtotal</span><strong id="shopSubtotal">₹500</strong></div>
               <div class="result-line"><span>Discount</span><strong id="shopDiscountValue">−₹0</strong></div>
-              <div class="result-line"><span>GST</span><strong id="shopGstValue">₹0</strong></div>
+              <div class="result-line"><span id="shopTaxableLabel">Taxable value</span><strong id="shopTaxableValue">₹500</strong></div>
+              <div class="result-line" id="shopCgstRow"><span>CGST</span><strong id="shopCgstValue">₹45</strong></div>
+              <div class="result-line" id="shopSgstRow"><span>SGST</span><strong id="shopSgstValue">₹45</strong></div>
+              <div class="result-line" id="shopIgstRow" hidden><span>IGST</span><strong id="shopIgstValue">₹90</strong></div>
+              <div class="result-line"><span>Total GST</span><strong id="shopGstValue">₹90</strong></div>
               <div class="result-line result-profit"><span>Estimated gross profit*</span><strong id="shopProfit">₹150</strong></div>
+              <details class="calculation-details">
+                <summary>How this calculation works</summary>
+                <p id="shopFormulaExplanation">GST is added to the discounted selling price. Amounts are rounded to the nearest paise.</p>
+              </details>
               <p class="helper-text result-footnote">*Before other expenses and taxes; GST collected is not counted as profit.</p>
             </section>
           </div>
@@ -292,7 +314,7 @@
         </section>
 
         <section class="view" id="view-more" aria-labelledby="more-title">
-          <div class="page-heading"><p class="eyebrow">EVERYDAY UTILITIES</p><h1 id="more-title">More calculators<span class="title-dot">.</span></h1><p>Handy tools for age, shopping, savings, measurements, and travel.</p></div>
+          <div class="page-heading"><p class="eyebrow">EVERYDAY UTILITIES</p><h1 id="more-title">More calculators<span class="title-dot">.</span></h1><p>Handy tools for home energy, age, shopping, savings, measurements, and travel.</p></div>
           <div class="tool-grid more-grid">
             <button class="tool-card percentage-tool" type="button" data-view-link="percentage">
               <span class="tool-icon" aria-hidden="true">%</span><span class="tool-tag">MONEY</span>
@@ -309,6 +331,10 @@
             <button class="tool-card fuel-tool" type="button" data-view-link="fuel">
               <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 21V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v17M3 21h14M7 6h6v5H7zM16 8h2l2 2v6a2 2 0 0 0 4 0v-5l-2-2"/></svg></span><span class="tool-tag">TRAVEL</span>
               <strong>Fuel cost calculator</strong><small>Estimate fuel needed and trip cost</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card electricity-tool" type="button" data-view-link="electricity">
+              <span class="tool-icon" aria-hidden="true">⚡</span><span class="tool-tag">HOME</span>
+              <strong>Electricity bill estimate</strong><small>Estimate energy and fixed charges</small><span class="tool-arrow">↗</span>
             </button>
             <button class="tool-card age-tool" type="button" data-view-link="age">
               <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01"/></svg></span><span class="tool-tag">LIFE & DATES</span>
@@ -415,6 +441,30 @@
           </div>
         </section>
 
+        <section class="view" id="view-electricity" aria-labelledby="electricity-title">
+          <div class="page-heading"><p class="eyebrow">HOME TOOL</p><h1 id="electricity-title">Electricity bill estimate<span class="title-dot">.</span></h1><p>Estimate a bill from your units used, energy rate, and fixed charges.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="electricityForm" novalidate>
+              <div class="panel-title"><span class="mini-icon mint">⚡</span><div><h2>Bill details</h2><p>Use the per-unit rate shown on your bill</p></div></div>
+              <label class="field"><span>Energy used</span><span class="input-shell"><input id="electricityUnits" type="number" value="250" min="0" step="any" inputmode="decimal" required /><span class="input-suffix">kWh (units)</span></span></label>
+              <label class="field"><span>Energy rate</span><span class="input-shell"><span class="input-prefix">₹</span><input id="electricityRate" type="number" value="5.5" min="0" step="any" inputmode="decimal" required /><span class="input-suffix">per unit</span></span></label>
+              <label class="field"><span>Fixed and other charges</span><span class="input-shell"><span class="input-prefix">₹</span><input id="electricityFixed" type="number" value="80" min="0" step="any" inputmode="decimal" required /></span></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Estimate bill <span>→</span></button><button class="button button-quiet" id="electricityReset" type="button">Reset</button></div>
+              <p class="helper-text">Estimate only. This does not apply your provider’s tariff slabs, subsidies, duties, or taxes. Add other charges above if needed and check your actual bill.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">MONTHLY BILL ESTIMATE</span><button class="icon-button" id="copyElectricity" type="button" aria-label="Copy electricity estimate" title="Copy result">⧉</button></div>
+              <p class="result-caption">Estimated amount</p><strong class="big-result" id="electricityTotal">₹1,455</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Energy used</span><strong id="electricityUnitsResult">250 units</strong></div>
+              <div class="result-line"><span>Energy charges</span><strong id="electricityEnergyCharge">₹1,375</strong></div>
+              <div class="result-line"><span>Fixed and other charges</span><strong id="electricityFixedResult">₹80</strong></div>
+              <div class="result-line"><span>Average cost per unit</span><strong id="electricityAverageRate">₹5.82</strong></div>
+              <div class="result-note"><span>i</span><p id="electricityFormula">Energy used × your per-unit rate + fixed charges. Actual bills may use slab-based rates.</p></div>
+            </section>
+          </div>
+        </section>
+
         <section class="view" id="view-age" aria-labelledby="age-title">
           <div class="page-heading"><p class="eyebrow">LIFE & DATES TOOL</p><h1 id="age-title">Age calculator<span class="title-dot">.</span></h1><p>Find an exact age on a chosen date, plus the time until the next birthday.</p></div>
           <div class="calculator-layout">
@@ -484,14 +534,61 @@
           </div>
         </section>
 
-        <button class="floating-back" id="backButton" type="button" aria-label="Go back" hidden>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
-          <span>Back</span>
-        </button>
+        <section class="view" id="view-login" aria-labelledby="login-title">
+          <div class="page-heading"><p class="eyebrow">YOUR HISABWIZ ACCOUNT</p><h1 id="login-title">Welcome back<span class="title-dot">.</span></h1><p>Sign in to your account to manage your profile.</p></div>
+          <section class="panel auth-panel">
+            <form class="auth-form" id="loginForm">
+              <label class="field"><span>Email address</span><span class="input-shell"><input id="loginEmail" type="email" autocomplete="email" required /></span></label>
+              <label class="field"><span>Password</span><span class="input-shell"><input id="loginPassword" type="password" autocomplete="current-password" required /></span></label>
+              <button class="button button-primary auth-submit" type="submit" disabled>Sign in</button>
+            </form>
+            <p class="auth-message" id="loginMessage" role="status" aria-live="polite"></p>
+            <p class="auth-switch">New to HisabWiz? <button class="text-button" type="button" data-view-link="register">Create an account</button></p>
+            <p class="auth-setup-note" id="loginSetupNote" role="status">Account sign-in is optional. Configure Supabase to enable accounts; all calculators work without registration.</p>
+            <button class="button button-quiet auth-skip" type="button" data-auth-skip>Continue without an account</button>
+          </section>
+        </section>
+
+        <section class="view" id="view-register" aria-labelledby="register-title">
+          <div class="page-heading"><p class="eyebrow">CREATE YOUR ACCOUNT</p><h1 id="register-title">Join HisabWiz<span class="title-dot">.</span></h1><p>Create an account to manage your profile. An account is optional.</p></div>
+          <section class="panel auth-panel">
+            <form class="auth-form" id="registerForm">
+              <label class="field"><span>Display name</span><span class="input-shell"><input id="registerName" type="text" autocomplete="name" maxlength="80" required /></span></label>
+              <label class="field"><span>Email address</span><span class="input-shell"><input id="registerEmail" type="email" autocomplete="email" required /></span></label>
+              <label class="field"><span>Password</span><span class="input-shell"><input id="registerPassword" type="password" autocomplete="new-password" minlength="8" required /></span></label>
+              <label class="field"><span>Confirm password</span><span class="input-shell"><input id="registerPasswordConfirm" type="password" autocomplete="new-password" minlength="8" required /></span></label>
+              <button class="button button-primary auth-submit" type="submit" disabled>Create account</button>
+            </form>
+            <p class="auth-message" id="registerMessage" role="status" aria-live="polite"></p>
+            <p class="auth-switch">Already registered? <button class="text-button" type="button" data-view-link="login">Sign in</button></p>
+            <p class="auth-setup-note" id="registerSetupNote" role="status">Account registration is optional. Configure Supabase to enable accounts; all calculators work without registration.</p>
+            <button class="button button-quiet auth-skip" type="button" data-auth-skip>Continue without an account</button>
+          </section>
+        </section>
+
+        <section class="view" id="view-profile" aria-labelledby="profile-title">
+          <div class="page-heading"><p class="eyebrow">ACCOUNT</p><h1 id="profile-title">Your profile<span class="title-dot">.</span></h1><p>Manage your HisabWiz account details.</p></div>
+          <section class="panel auth-panel" id="profileGuest">
+            <p>You’re using HisabWiz without an account. Sign in if you have one, or keep using the calculators without registering.</p>
+            <div class="form-actions"><button class="button button-primary" type="button" data-view-link="login">Sign in</button><button class="button button-quiet" type="button" data-auth-skip>Continue without an account</button></div>
+          </section>
+          <section class="panel auth-panel" id="profileAccount" hidden>
+            <p class="profile-email" id="profileEmail"></p>
+            <form class="auth-form" id="profileForm">
+              <label class="field"><span>Display name</span><span class="input-shell"><input id="profileDisplayName" type="text" autocomplete="name" maxlength="80" required /></span></label>
+              <button class="button button-primary auth-submit" type="submit">Save profile</button>
+            </form>
+            <p class="auth-message" id="profileMessage" role="status" aria-live="polite"></p>
+            <button class="button button-quiet" id="signOutButton" type="button">Sign out</button>
+          </section>
+        </section>
+
         <div class="toast" id="toast" role="status" aria-live="polite"></div>
       </main>
     </div>
     <script src="daily-quotes.js"></script>
     <script src="script.js"></script>
+    <script src="supabase-config.js"></script>
+    <script type="module" src="auth.js"></script>
   </body>
 </html>

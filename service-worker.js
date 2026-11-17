@@ -1,9 +1,11 @@
-const CACHE_NAME = 'hisabwiz-shell-v5';
+const CACHE_NAME = 'hisabwiz-shell-v9';
 const APP_SHELL = [
   './',
   './index.html',
   './styles.css',
   './script.js',
+  './auth.js',
+  './supabase-config.js',
   './daily-quotes.js',
   './manifest.webmanifest',
   './privacy.html',

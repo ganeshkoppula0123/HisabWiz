@@ -30,7 +30,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir -p _site/icons
-          cp index.html styles.css script.js daily-quotes.js manifest.webmanifest service-worker.js privacy.html _site/
+          cp index.html styles.css script.js auth.js supabase-config.js daily-quotes.js manifest.webmanifest service-worker.js privacy.html _site/
           cp icons/* _site/icons/
           touch _site/.nojekyll
 

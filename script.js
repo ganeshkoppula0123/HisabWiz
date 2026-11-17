@@ -2,6 +2,7 @@ const views = [...document.querySelectorAll('.view')];
 const navigationButtons = [...document.querySelectorAll('[data-view-link]')];
 const toast = document.getElementById('toast');
 const backButton = document.getElementById('backButton');
+const mobileBackButton = document.getElementById('mobileBackButton');
 const heroCard = document.querySelector('.hero-card');
 const popularFeatureButtons = [...document.querySelectorAll('[data-popular-feature]')];
 const HISTORY_KEY = 'hisab-recent-calculations-v1';
@@ -10,6 +11,8 @@ let currentView = 'home';
 let toastTimer;
 let popularRotationTimer;
 let popularFeatureAnimationTimer;
+const resultRevealTimers = new WeakMap();
+let calculationInvalid = false;
 let activePopularFeature = 0;
 const reducedMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -138,7 +141,7 @@ function navigate(viewName, recordHistory = true) {
     currentView = viewName;
   }
   views.forEach((view) => view.classList.toggle('active', view.id === `view-${viewName}`));
-  const activeNavigation = ['percentage', 'dates', 'converter', 'fuel', 'age', 'split', 'savings'].includes(viewName)
+  const activeNavigation = ['percentage', 'dates', 'converter', 'fuel', 'electricity', 'age', 'split', 'savings'].includes(viewName)
     ? 'more'
     : viewName;
   document.querySelectorAll('.nav-item').forEach((button) => {
@@ -148,6 +151,7 @@ function navigate(viewName, recordHistory = true) {
     else button.removeAttribute('aria-current');
   });
   backButton.hidden = currentView === 'home';
+  mobileBackButton.hidden = currentView === 'home';
   if (currentView === 'home') startPopularRotation();
   else stopPopularRotation();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -157,9 +161,16 @@ navigationButtons.forEach((button) => {
   button.addEventListener('click', () => navigate(button.dataset.viewLink));
 });
 
-backButton.addEventListener('click', () => {
-  navigate(viewHistory.pop() || 'home', false);
+document.querySelectorAll('[data-auth-skip]').forEach((button) => {
+  button.addEventListener('click', () => navigate('home', false));
 });
+
+function navigateBack() {
+  navigate(viewHistory.pop() || 'home', false);
+}
+
+backButton.addEventListener('click', navigateBack);
+mobileBackButton.addEventListener('click', navigateBack);
 
 function getHistory() {
   try {
@@ -228,15 +239,58 @@ function areValid(values, { allowZero = false, max = Infinity, integers = false 
 }
 
 function reportInvalid(message) {
+  calculationInvalid = true;
   showToast(message);
 }
+
+function revealResultOnMobile(resultElement) {
+  if (!window.matchMedia('(max-width: 760px)').matches) return;
+
+  window.clearTimeout(resultRevealTimers.get(resultElement));
+  resultRevealTimers.delete(resultElement);
+  resultElement.scrollIntoView({
+    behavior: reducedMotionPreference.matches ? 'auto' : 'smooth',
+    block: 'start',
+  });
+  resultElement.classList.remove('result-reveal');
+  void resultElement.offsetWidth;
+  resultElement.classList.add('result-reveal');
+  const revealTimer = window.setTimeout(() => {
+    resultElement.classList.remove('result-reveal');
+    resultRevealTimers.delete(resultElement);
+  }, 800);
+  resultRevealTimers.set(resultElement, revealTimer);
+}
+
+document.addEventListener('submit', (event) => {
+  if (event.target instanceof HTMLFormElement && event.target.matches('.calculator-layout form')) {
+    calculationInvalid = false;
+    const resultPanel = event.target.nextElementSibling;
+    if (resultPanel?.classList.contains('result-panel')) {
+      window.clearTimeout(resultRevealTimers.get(resultPanel));
+      resultRevealTimers.delete(resultPanel);
+      resultPanel.classList.remove('result-reveal');
+    }
+  }
+}, true);
+
+document.addEventListener('submit', (event) => {
+  if (!(event.target instanceof HTMLFormElement) ||
+      !event.target.matches('.calculator-layout form') ||
+      !event.defaultPrevented ||
+      calculationInvalid ||
+      !event.target.closest('.view.active')) return;
+
+  const resultPanel = event.target.nextElementSibling;
+  if (resultPanel?.classList.contains('result-panel')) revealResultOnMobile(resultPanel);
+});
 
 function calculateInterest(remember = true) {
   const [principal, rate, duration] = readValues(['principal', 'rate', 'interestTime']);
   const unit = document.getElementById('interestUnit').value;
   if (!areValid([principal, duration]) || !areValid([rate], { allowZero: true })) {
     reportInvalid('Enter a principal and duration greater than zero, and a valid monthly rate.');
-    return;
+    return false;
   }
 
   const months = unit === 'years' ? duration * 12 : duration;
@@ -244,7 +298,7 @@ function calculateInterest(remember = true) {
   const total = principal + interest;
   if (!Number.isFinite(total)) {
     reportInvalid('Those values are too large to calculate.');
-    return;
+    return false;
   }
 
   document.getElementById('interestTotal').textContent = formatCurrency(total);
@@ -252,6 +306,7 @@ function calculateInterest(remember = true) {
   document.getElementById('interestValue').textContent = formatCurrency(interest);
   document.getElementById('interestRateResult').textContent = `${formatNumber(rate)}% monthly`;
   if (remember) saveHistory('Simple interest', `${formatCurrency(principal)} · ${formatNumber(months)} months`, formatCurrency(total));
+  return true;
 }
 
 document.getElementById('interestForm').addEventListener('submit', (event) => {
@@ -268,30 +323,61 @@ function calculateShopBill(remember = true) {
   const [selling, cost, quantity, discountRate, gstRate] = readValues([
     'shopSelling', 'shopCost', 'shopQuantity', 'shopDiscount', 'shopGst',
   ]);
+  const gstMode = document.getElementById('shopGstMode').value;
+  const supplyType = document.getElementById('shopSupplyType').value;
   if (!areValid([selling, cost], { allowZero: true }) ||
       !areValid([quantity], { integers: true }) ||
-      !areValid([discountRate, gstRate], { allowZero: true, max: 100 })) {
+      !areValid([discountRate], { allowZero: true, max: 100 }) ||
+      ![0, 5, 12, 18, 28].includes(gstRate)) {
     reportInvalid('Check prices, whole-number quantity, discount, and GST rate.');
     return;
   }
 
-  const subtotal = selling * quantity;
-  const discount = subtotal * discountRate / 100;
-  const taxableTotal = subtotal - discount;
-  const gst = taxableTotal * gstRate / 100;
-  const payable = taxableTotal + gst;
-  const profit = taxableTotal - cost * quantity;
-  if (![subtotal, payable, profit].every(Number.isFinite)) {
+  const subtotalPaise = Math.round(selling * quantity * 100);
+  const discountPaise = Math.round(subtotalPaise * discountRate / 100);
+  const discountedPricePaise = subtotalPaise - discountPaise;
+  const taxablePaise = gstMode === 'inclusive'
+    ? Math.round(discountedPricePaise / (1 + gstRate / 100))
+    : discountedPricePaise;
+  const gstPaise = gstMode === 'inclusive'
+    ? discountedPricePaise - taxablePaise
+    : Math.round(taxablePaise * gstRate / 100);
+  const payablePaise = gstMode === 'inclusive' ? discountedPricePaise : taxablePaise + gstPaise;
+  const costPaise = Math.round(cost * quantity * 100);
+  const profitPaise = taxablePaise - costPaise;
+  if (![subtotalPaise, discountPaise, taxablePaise, gstPaise, payablePaise, costPaise, profitPaise]
+    .every(Number.isSafeInteger)) {
     reportInvalid('Those values are too large to calculate.');
     return;
   }
 
-  document.getElementById('shopGrandTotal').textContent = formatCurrency(payable);
-  document.getElementById('shopSubtotal').textContent = formatCurrency(subtotal);
-  document.getElementById('shopDiscountValue').textContent = `−${formatCurrency(discount)}`;
-  document.getElementById('shopGstValue').textContent = formatCurrency(gst);
-  document.getElementById('shopProfit').textContent = formatCurrency(profit);
-  if (remember) saveHistory('Shop bill', `${formatNumber(quantity, 0)} item${quantity === 1 ? '' : 's'} · ${formatNumber(discountRate)}% discount`, formatCurrency(payable));
+  const cgstPaise = supplyType === 'intra' ? Math.round(gstPaise / 2) : 0;
+  const sgstPaise = supplyType === 'intra' ? gstPaise - cgstPaise : 0;
+  const igstPaise = supplyType === 'inter' ? gstPaise : 0;
+  const fromPaise = (value) => value / 100;
+  const money = (value) => formatCurrency(fromPaise(value));
+  document.getElementById('shopGrandTotal').textContent = money(payablePaise);
+  document.getElementById('shopSubtotal').textContent = money(subtotalPaise);
+  document.getElementById('shopDiscountValue').textContent = `−${money(discountPaise)}`;
+  document.getElementById('shopTaxableValue').textContent = money(taxablePaise);
+  document.getElementById('shopTaxableLabel').textContent = gstMode === 'inclusive'
+    ? 'Taxable value (GST excluded)'
+    : 'Taxable value';
+  document.getElementById('shopCgstValue').textContent = money(cgstPaise);
+  document.getElementById('shopSgstValue').textContent = money(sgstPaise);
+  document.getElementById('shopIgstValue').textContent = money(igstPaise);
+  document.getElementById('shopCgstRow').hidden = supplyType === 'inter';
+  document.getElementById('shopSgstRow').hidden = supplyType === 'inter';
+  document.getElementById('shopIgstRow').hidden = supplyType !== 'inter';
+  document.getElementById('shopGstValue').textContent = money(gstPaise);
+  document.getElementById('shopProfit').textContent = money(profitPaise);
+  const taxDescription = supplyType === 'inter'
+    ? `IGST ${money(igstPaise)}`
+    : `CGST ${money(cgstPaise)} + SGST ${money(sgstPaise)}`;
+  document.getElementById('shopFormulaExplanation').textContent = gstMode === 'inclusive'
+    ? `After discount, the GST-inclusive price is ${money(discountedPricePaise)}. Taxable value = price ÷ (1 + ${formatNumber(gstRate)} ÷ 100) = ${money(taxablePaise)}; GST = ${money(gstPaise)} (${taxDescription}). Each amount is rounded to the nearest paise.`
+    : `After discount, taxable value = subtotal − discount = ${money(taxablePaise)}. GST = taxable value × ${formatNumber(gstRate)}% = ${money(gstPaise)} (${taxDescription}). Each amount is rounded to the nearest paise.`;
+  if (remember) saveHistory('Shop bill', `${formatNumber(quantity, 0)} item${quantity === 1 ? '' : 's'} · ${formatNumber(gstRate)}% GST`, money(payablePaise));
 }
 
 document.getElementById('shopForm').addEventListener('submit', (event) => {
@@ -302,6 +388,9 @@ document.getElementById('shopForm').addEventListener('submit', (event) => {
 document.getElementById('shopReset').addEventListener('click', () => {
   document.getElementById('shopForm').reset();
   calculateShopBill(false);
+});
+['shopGst', 'shopGstMode', 'shopSupplyType'].forEach((id) => {
+  document.getElementById(id).addEventListener('change', () => calculateShopBill(false));
 });
 
 const squareFeetPerUnit = {
@@ -784,6 +873,54 @@ document.getElementById('fuelReset').addEventListener('click', () => {
   calculateFuel(false);
 });
 
+function calculateElectricityBill(remember = true) {
+  const [units, rate, fixedCharges] = readValues(['electricityUnits', 'electricityRate', 'electricityFixed']);
+  if (['electricityUnits', 'electricityRate', 'electricityFixed']
+    .some((id) => document.getElementById(id).value.trim() === '') ||
+      !areValid([units, rate, fixedCharges], { allowZero: true })) {
+    reportInvalid('Enter non-negative units, a per-unit rate, and fixed charges.');
+    return;
+  }
+
+  const energyChargePaise = Math.round(units * rate * 100);
+  const fixedChargesPaise = Math.round(fixedCharges * 100);
+  const totalPaise = energyChargePaise + fixedChargesPaise;
+  const energyCharge = energyChargePaise / 100;
+  const total = totalPaise / 100;
+  const averageRate = units === 0 ? null : total / units;
+  if (![energyCharge, total, averageRate === null ? 0 : averageRate].every(Number.isFinite) ||
+      ![energyChargePaise, fixedChargesPaise, totalPaise].every(Number.isSafeInteger)) {
+    reportInvalid('Those values are too large to calculate accurately.');
+    return;
+  }
+
+  document.getElementById('electricityTotal').textContent = formatCurrency(total);
+  document.getElementById('electricityUnitsResult').textContent = `${formatNumber(units)} units`;
+  document.getElementById('electricityEnergyCharge').textContent = formatCurrency(energyCharge);
+  document.getElementById('electricityFixedResult').textContent = formatCurrency(fixedChargesPaise / 100);
+  document.getElementById('electricityAverageRate').textContent = averageRate === null
+    ? '—'
+    : `${formatCurrency(averageRate)} / unit`;
+  document.getElementById('electricityFormula').textContent =
+    `${formatNumber(units)} units × ${formatCurrency(rate)} per unit + ${formatCurrency(fixedCharges)} fixed/other charges. Actual bills may use slab-based rates.`;
+  if (remember) {
+    saveHistory(
+      'Electricity bill estimate',
+      `${formatNumber(units)} units · ${formatCurrency(rate)} / unit`,
+      formatCurrency(total)
+    );
+  }
+}
+
+document.getElementById('electricityForm').addEventListener('submit', (event) => {
+  event.preventDefault();
+  calculateElectricityBill();
+});
+document.getElementById('electricityReset').addEventListener('click', () => {
+  document.getElementById('electricityForm').reset();
+  calculateElectricityBill(false);
+});
+
 function addCalendarMonths(date, months) {
   const monthIndex = date.getUTCMonth() + months;
   const year = date.getUTCFullYear() + Math.floor(monthIndex / 12);
@@ -1048,6 +1185,7 @@ function pressCalculatorKey(key) {
     calcFresh = true;
     showCalculatorValue(formatted);
     saveHistory('Basic calculation', calcHistory.textContent, formatted);
+    revealResultOnMobile(document.querySelector('.basic-display'));
   }
 }
 
@@ -1084,7 +1222,22 @@ document.getElementById('copyInterest').addEventListener('click', () => {
   copyText(`Simple interest: ${document.getElementById('interestValue').textContent}. Total: ${document.getElementById('interestTotal').textContent}.`);
 });
 document.getElementById('copyShop').addEventListener('click', () => {
-  copyText(`Bill total: ${document.getElementById('shopGrandTotal').textContent}. Estimated gross profit: ${document.getElementById('shopProfit').textContent}.`);
+  const gstMode = document.getElementById('shopGstMode').value === 'inclusive' ? 'GST-inclusive' : 'GST-exclusive';
+  const supplyType = document.getElementById('shopSupplyType').value;
+  const taxBreakdown = supplyType === 'inter'
+    ? `IGST: ${document.getElementById('shopIgstValue').textContent}`
+    : `CGST: ${document.getElementById('shopCgstValue').textContent}; SGST: ${document.getElementById('shopSgstValue').textContent}`;
+  copyText([
+    `GST bill estimate (${gstMode}, ${document.getElementById('shopGst').value}% GST)`,
+    `Subtotal: ${document.getElementById('shopSubtotal').textContent}`,
+    `Discount: ${document.getElementById('shopDiscountValue').textContent}`,
+    `Taxable value: ${document.getElementById('shopTaxableValue').textContent}`,
+    taxBreakdown,
+    `Total GST: ${document.getElementById('shopGstValue').textContent}`,
+    `Customer total: ${document.getElementById('shopGrandTotal').textContent}`,
+    `Estimated gross profit: ${document.getElementById('shopProfit').textContent}`,
+    'Estimate only; verify applicable tax rules.',
+  ].join('\n'));
 });
 document.getElementById('copyProperty').addEventListener('click', () => {
   copyText(`Property area: ${document.getElementById('propertySqft').textContent}. Estimated value: ${document.getElementById('propertyValue').textContent}.`);
@@ -1103,6 +1256,15 @@ document.getElementById('copyConversion').addEventListener('click', () => {
 });
 document.getElementById('copyFuel').addEventListener('click', () => {
   copyText(`Estimated fuel cost: ${document.getElementById('fuelResult').textContent}.`);
+});
+document.getElementById('copyElectricity').addEventListener('click', () => {
+  copyText([
+    `Estimated electricity bill: ${document.getElementById('electricityTotal').textContent}`,
+    `Energy used: ${document.getElementById('electricityUnitsResult').textContent}`,
+    `Energy charges: ${document.getElementById('electricityEnergyCharge').textContent}`,
+    `Fixed and other charges: ${document.getElementById('electricityFixedResult').textContent}`,
+    'Estimate only; actual provider tariffs and bill adjustments may differ.',
+  ].join('\n'));
 });
 document.getElementById('copyAge').addEventListener('click', () => {
   copyText(`Age: ${document.getElementById('ageResult').textContent}.`);
@@ -1150,6 +1312,7 @@ calculateDates(false);
 populateUnitOptions();
 calculateConversion(false);
 calculateFuel(false);
+calculateElectricityBill(false);
 calculateBillSplit(false);
 updateSavingsFields();
 calculateSavings(false);
