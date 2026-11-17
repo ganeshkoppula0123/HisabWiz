@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+node_modules/
+dist/
+*.jks
+*.keystore
+google-services.json
+*.mobileprovision
+*.p12
+/multi_Calculator/
+.env
+.env.*
+!.env.example

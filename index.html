@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#287252" />
+    <meta name="description" content="Everyday calculators for money, shops, property, dates, units, and travel." />
+    <title>HisabWiz — Everyday Calculators</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="HisabWiz" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="./icons/favicon.svg" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#" data-view-link="home" aria-label="HisabWiz home">
+          <span class="brand-mark">H</span>
+          <span>Hisab<span class="brand-accent">Wiz</span></span>
+        </a>
+        <p class="nav-label">WORKSPACE</p>
+        <nav class="main-nav" aria-label="Main navigation">
+          <button class="nav-item active" type="button" data-view-link="home"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg><span class="nav-text"><span class="desktop-label">Overview</span><span class="mobile-label">Home</span></span></button>
+          <p class="nav-label nav-group-label">CALCULATORS</p>
+          <button class="nav-item" type="button" data-view-link="interest"><span class="nav-icon rupee-icon" aria-hidden="true">₹</span><span class="nav-text"><span class="desktop-label">Interest</span><span class="mobile-label">Interest</span></span></button>
+          <button class="nav-item" type="button" data-view-link="basic"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2.5" width="16" height="19" rx="3"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/></svg><span class="nav-text"><span class="desktop-label">Basic calculator</span><span class="mobile-label">Basic</span></span></button>
+          <button class="nav-item" type="button" data-view-link="shop"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16l-1.3-5H5.3L4 8Z"/><path d="M5 8v13h14V8M9 21v-7h6v7M4 8a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0"/></svg><span class="nav-text"><span class="desktop-label">Shop & billing</span><span class="mobile-label">Shop</span></span></button>
+          <button class="nav-item" type="button" data-view-link="property"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg><span class="nav-text"><span class="desktop-label">Property</span><span class="mobile-label">Property</span></span></button>
+          <button class="nav-item" type="button" data-view-link="emi"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17"/><path d="m7 15 4-4 3 2 6-7M15 6h5v5"/></svg><span class="nav-text"><span class="desktop-label">Loan EMI</span><span class="mobile-label">EMI</span></span></button>
+          <button class="nav-item" type="button" data-view-link="more"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h5v5H5zM14 5h5v5h-5zM5 14h5v5H5zM14 14h5v5h-5z"/></svg><span class="nav-text"><span class="desktop-label">More tools</span><span class="mobile-label">More</span></span></button>
+        </nav>
+        <div class="sidebar-note">
+          <span class="note-icon">✓</span>
+          <p><strong>Your numbers stay yours.</strong><br />Calculations stay in this browser.</p>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="mobile-brand"><span class="brand-mark">H</span><strong>Hisab<span class="brand-accent">Wiz</span></strong></div>
+          <div class="topbar-spacer"></div>
+          <button class="button button-quiet install-button" id="installAppButton" type="button" hidden>Install app</button>
+          <span class="local-badge"><span class="status-dot"></span><span class="badge-desktop">Private by design · saved on this device</span><span class="badge-mobile">Private · on device</span></span>
+        </header>
+
+        <section class="view active" id="view-home" aria-labelledby="home-title">
+          <div class="welcome-row">
+            <div>
+              <p class="eyebrow">YOUR EVERYDAY TOOLKIT</p>
+              <h1 id="home-title">Good morning<span class="title-dot">.</span></h1>
+              <p class="intro">Quick answers for everyday money, work, home, and travel calculations.</p>
+            </div>
+            <div class="date-chip" id="todayDate"></div>
+          </div>
+
+          <section class="hero-card">
+            <div class="hero-copy">
+              <div class="hero-topline">
+                <span class="hero-kicker">POPULAR CALCULATIONS</span>
+                <div class="hero-controls" role="group" aria-label="Choose a popular calculator">
+                  <button class="hero-control active" type="button" data-popular-feature="0" aria-label="Show interest calculator" aria-pressed="true"></button>
+                  <button class="hero-control" type="button" data-popular-feature="1" aria-label="Show loan EMI calculator" aria-pressed="false"></button>
+                  <button class="hero-control" type="button" data-popular-feature="2" aria-label="Show shop and billing calculator" aria-pressed="false"></button>
+                  <button class="hero-control" type="button" data-popular-feature="3" aria-label="Show percentage calculator" aria-pressed="false"></button>
+                  <button class="hero-control" type="button" data-popular-feature="4" aria-label="Show property calculator" aria-pressed="false"></button>
+                </div>
+              </div>
+              <div class="hero-feature-content">
+                <h2 id="heroFeatureTitle">Interest, without the mental math.</h2>
+                <p id="heroFeatureDescription">Enter an amount and a time period to see the interest earned and the final total.</p>
+                <button class="button button-light" id="heroFeatureButton" type="button" data-view-link="interest"><span id="heroFeatureAction">Calculate interest</span><span aria-hidden="true">→</span></button>
+              </div>
+            </div>
+            <div class="hero-example" aria-label="Quick example for the featured calculator">
+              <div class="example-top"><span id="heroExampleTitle">QUICK EXAMPLE</span><span class="example-dot"></span></div>
+              <div class="example-values">
+                <div><small id="heroExampleFirstLabel">Principal</small><strong id="heroExampleFirstValue">₹1,00,000</strong></div>
+                <span class="example-times" id="heroExampleOperator">×</span>
+                <div><small id="heroExampleSecondLabel">Rate / month</small><strong id="heroExampleSecondValue">₹2 / ₹100</strong></div>
+              </div>
+              <div class="example-result"><span id="heroExampleResultLabel">Interest in 2 years</span><strong id="heroExampleResultValue">₹48,000</strong></div>
+            </div>
+            <div class="hero-orb orb-one"></div>
+            <div class="hero-orb orb-two"></div>
+          </section>
+
+          <div class="section-heading">
+            <div><p class="eyebrow">MADE FOR REAL LIFE</p><h2>Pick a tool</h2></div>
+            <span class="tool-count">12 useful tools</span>
+          </div>
+          <div class="tool-grid">
+            <button class="tool-card interest-tool" type="button" data-view-link="interest">
+              <span class="tool-icon rupee-icon" aria-hidden="true">₹</span><span class="tool-tag">MONEY</span>
+              <strong>Interest calculator</strong><small>Simple interest, monthly or yearly</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card basic-tool" type="button" data-view-link="basic">
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="2.5" width="16" height="19" rx="3"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/></svg></span><span class="tool-tag">EVERYDAY</span>
+              <strong>Basic calculator</strong><small>Quick arithmetic on the go</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card shop-tool" type="button" data-view-link="shop">
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h16l-1.3-5H5.3L4 8Z"/><path d="M5 8v13h14V8M9 21v-7h6v7M4 8a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0"/></svg></span><span class="tool-tag">SMALL SHOP</span>
+              <strong>Shop & billing</strong><small>Discount, GST, and profit estimate</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card property-tool" type="button" data-view-link="property">
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg></span><span class="tool-tag">REAL ESTATE</span>
+              <strong>Property calculator</strong><small>Convert land area and estimate value</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card emi-tool" type="button" data-view-link="emi">
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h17"/><path d="m7 15 4-4 3 2 6-7M15 6h5v5"/></svg></span><span class="tool-tag">FINANCE AGENT</span>
+              <strong>Loan EMI</strong><small>Estimate monthly payment and interest</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card percentage-tool" type="button" data-view-link="percentage">
+              <span class="tool-icon" aria-hidden="true">%</span><span class="tool-tag">MONEY</span>
+              <strong>Percentage calculator</strong><small>Find a percent, share, or price change</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card dates-tool" type="button" data-view-link="dates">
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span><span class="tool-tag">PLANNING</span>
+              <strong>Date calculator</strong><small>Count days or find a date after a period</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card converter-tool" type="button" data-view-link="converter">
+              <span class="tool-icon" aria-hidden="true">↔</span><span class="tool-tag">CONVERSION</span>
+              <strong>Unit converter</strong><small>Convert length, weight, volume, area, and temperature</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card fuel-tool" type="button" data-view-link="fuel">
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 21V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v17M3 21h14M7 6h6v5H7zM16 8h2l2 2v6a2 2 0 0 0 4 0v-5l-2-2"/></svg></span><span class="tool-tag">TRAVEL</span>
+              <strong>Fuel cost calculator</strong><small>Estimate fuel needed and trip cost</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card age-tool" type="button" data-view-link="age">
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01"/></svg></span><span class="tool-tag">LIFE & DATES</span>
+              <strong>Age calculator</strong><small>Find exact age and days until next birthday</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card split-tool" type="button" data-view-link="split">
+              <span class="tool-icon" aria-hidden="true">÷</span><span class="tool-tag">EVERYDAY</span>
+              <strong>Bill split calculator</strong><small>Share a bill evenly, including a tip</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card savings-tool" type="button" data-view-link="savings">
+              <span class="tool-icon" aria-hidden="true">₹</span><span class="tool-tag">SAVING</span>
+              <strong>Savings goal planner</strong><small>Plan monthly saving or time to reach a goal</small><span class="tool-arrow">↗</span>
+            </button>
+          </div>
+
+          <section class="boost-card" aria-labelledby="boost-title">
+            <div class="boost-copy">
+              <p class="eyebrow">A LITTLE LIFT</p>
+              <h2 id="boost-title">A little boost for today.</h2>
+              <p>Spin for a fresh wish and a thought to carry into your day.</p>
+              <button class="button button-primary boost-button" id="spinBoost" type="button" aria-controls="boostWish boostQuote">
+                Spin for a boost <span>✦</span>
+              </button>
+            </div>
+            <div class="boost-wheel-stage" aria-hidden="true">
+              <span class="boost-pointer"></span>
+              <div class="boost-wheel" id="boostWheel">
+                <span class="boost-emoji" style="--angle:22.5deg">✨</span>
+                <span class="boost-emoji" style="--angle:67.5deg">🌞</span>
+                <span class="boost-emoji" style="--angle:112.5deg">🌱</span>
+                <span class="boost-emoji" style="--angle:157.5deg">💡</span>
+                <span class="boost-emoji" style="--angle:202.5deg">💛</span>
+                <span class="boost-emoji" style="--angle:247.5deg">🚀</span>
+                <span class="boost-emoji" style="--angle:292.5deg">🌈</span>
+                <span class="boost-emoji" style="--angle:337.5deg">⭐</span>
+                <span class="boost-wheel-center">✦</span>
+              </div>
+            </div>
+            <div class="boost-message" id="boostMessage" role="status" aria-live="polite">
+              <p id="boostWish">Ready when you are.</p>
+              <blockquote id="boostQuote">Take one steady step; the day is still yours to shape.</blockquote>
+            </div>
+          </section>
+
+          <section class="history-section">
+            <div class="section-heading history-heading">
+              <div><p class="eyebrow">ON THIS DEVICE</p><h2>Recent calculations</h2></div>
+              <button class="text-button" id="clearHistory" type="button">Clear history</button>
+            </div>
+            <div class="history-list" id="historyList"><div class="empty-history">Your calculations will show up here.</div></div>
+          </section>
+          <p class="disclaimer">Estimates are for convenience only. Verify rates, taxes, and property measurements before making financial decisions. <a href="./privacy.html">Privacy policy</a></p>
+        </section>
+
+        <section class="view" id="view-interest" aria-labelledby="interest-title">
+          <div class="page-heading"><p class="eyebrow">MONEY TOOL</p><h1 id="interest-title">Interest calculator<span class="title-dot">.</span></h1><p>See how much interest adds up and the total amount over your chosen time.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="interestForm" novalidate>
+              <div class="panel-title"><span class="mini-icon mint">₹</span><div><h2>Enter your details</h2><p>Simple interest, not compounded</p></div></div>
+              <label class="field"><span>Principal amount</span><span class="input-shell"><span class="input-prefix">₹</span><input id="principal" type="number" value="100000" min="0" step="0.01" inputmode="decimal" required /></span></label>
+              <label class="field"><span>Monthly rate (rupees per ₹100)</span><span class="input-shell"><span class="input-prefix">₹</span><input id="rate" type="number" value="2" min="0" step="0.01" inputmode="decimal" required /><span class="input-suffix">per 100 / month</span></span></label>
+              <label class="field"><span>Duration</span><span class="input-shell"><input id="interestTime" type="number" value="24" min="0" step="0.01" inputmode="decimal" required /><select id="interestUnit" aria-label="Duration unit"><option value="months">Months</option><option value="years">Years</option></select></span></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Calculate interest <span>→</span></button><button class="button button-quiet" id="interestReset" type="button">Reset</button></div>
+              <p class="helper-text">Formula: Principal × monthly rate ÷ 100 × number of months</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">YOUR RESULT</span><button class="icon-button" id="copyInterest" type="button" aria-label="Copy result" title="Copy result">⧉</button></div>
+              <p class="result-caption">Total amount after the period</p><strong class="big-result" id="interestTotal">₹1,48,000</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Principal</span><strong id="interestPrincipalResult">₹1,00,000</strong></div>
+              <div class="result-line"><span>Total interest</span><strong id="interestValue">₹48,000</strong></div>
+              <div class="result-line"><span>Rate used</span><strong id="interestRateResult">2% monthly</strong></div>
+              <div class="result-note"><span>i</span><p>This is simple interest. Interest is calculated on the original principal, not added back each month.</p></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-basic" aria-labelledby="basic-title">
+          <div class="page-heading"><p class="eyebrow">EVERYDAY TOOL</p><h1 id="basic-title">Basic calculator<span class="title-dot">.</span></h1><p>See a live answer as you enter the numbers. Press = when you’re ready.</p></div>
+          <div class="panel basic-calculator">
+            <div class="basic-display"><span id="calcHistory">Ready</span><output id="calcDisplay" aria-live="polite">0</output></div>
+            <div class="keypad" id="keypad">
+              <button type="button" class="key key-soft" data-key="clear">AC</button><button type="button" class="key key-soft" data-key="sign">±</button><button type="button" class="key key-soft" data-key="percent">%</button><button type="button" class="key key-operator" data-key="÷">÷</button>
+              <button type="button" class="key" data-key="7">7</button><button type="button" class="key" data-key="8">8</button><button type="button" class="key" data-key="9">9</button><button type="button" class="key key-operator" data-key="×">×</button>
+              <button type="button" class="key" data-key="4">4</button><button type="button" class="key" data-key="5">5</button><button type="button" class="key" data-key="6">6</button><button type="button" class="key key-operator" data-key="−">−</button>
+              <button type="button" class="key" data-key="1">1</button><button type="button" class="key" data-key="2">2</button><button type="button" class="key" data-key="3">3</button><button type="button" class="key key-operator" data-key="+">+</button>
+              <button type="button" class="key key-zero" data-key="0">0</button><button type="button" class="key" data-key=".">.</button><button type="button" class="key key-equals" data-key="=">=</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-shop" aria-labelledby="shop-title">
+          <div class="page-heading"><p class="eyebrow">SMALL SHOP TOOL</p><h1 id="shop-title">Shop & billing<span class="title-dot">.</span></h1><p>Estimate the customer total after discount and GST, plus your gross profit.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="shopForm" novalidate>
+              <div class="panel-title"><span class="mini-icon peach">▤</span><div><h2>Sale details</h2><p>Enter per-item prices and quantity</p></div></div>
+              <label class="field"><span>Selling price / item</span><span class="input-shell"><span class="input-prefix">₹</span><input id="shopSelling" type="number" value="500" min="0" step="0.01" inputmode="decimal" required /></span></label>
+              <label class="field"><span>Cost price / item (for profit)</span><span class="input-shell"><span class="input-prefix">₹</span><input id="shopCost" type="number" value="350" min="0" step="0.01" inputmode="decimal" required /></span></label>
+              <div class="field-row">
+                <label class="field"><span>Quantity</span><span class="input-shell"><input id="shopQuantity" type="number" value="1" min="1" step="1" inputmode="numeric" required /></span></label>
+                <label class="field"><span>Discount</span><span class="input-shell"><input id="shopDiscount" type="number" value="0" min="0" max="100" step="0.01" inputmode="decimal" required /><span class="input-suffix">%</span></span></label>
+              </div>
+              <label class="field"><span>GST rate</span><span class="input-shell"><input id="shopGst" type="number" value="0" min="0" max="100" step="0.01" inputmode="decimal" required /><span class="input-suffix">%</span></span></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Calculate bill <span>→</span></button><button class="button button-quiet" id="shopReset" type="button">Reset</button></div>
+              <p class="helper-text">GST is estimated on the discounted selling total. Confirm the applicable tax rate for your goods.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">BILL ESTIMATE</span><button class="icon-button" id="copyShop" type="button" aria-label="Copy bill estimate" title="Copy result">⧉</button></div>
+              <p class="result-caption">Customer pays</p><strong class="big-result" id="shopGrandTotal">₹500</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Subtotal</span><strong id="shopSubtotal">₹500</strong></div>
+              <div class="result-line"><span>Discount</span><strong id="shopDiscountValue">−₹0</strong></div>
+              <div class="result-line"><span>GST</span><strong id="shopGstValue">₹0</strong></div>
+              <div class="result-line result-profit"><span>Estimated gross profit*</span><strong id="shopProfit">₹150</strong></div>
+              <p class="helper-text result-footnote">*Before other expenses and taxes; GST collected is not counted as profit.</p>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-property" aria-labelledby="property-title">
+          <div class="page-heading"><p class="eyebrow">REAL ESTATE TOOL</p><h1 id="property-title">Property calculator<span class="title-dot">.</span></h1><p>Convert common land units and get a quick price estimate.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="propertyForm" novalidate>
+              <div class="panel-title"><span class="mini-icon lavender">⌂</span><div><h2>Land details</h2><p>Conversions use standard unit factors</p></div></div>
+              <label class="field"><span>Land area</span><span class="input-shell"><input id="landArea" type="number" value="1" min="0" step="0.01" inputmode="decimal" required /><select id="areaUnit" aria-label="Land area unit"><option value="sqft">sq ft</option><option value="sqyd">sq yd</option><option value="sqm">sq m</option><option value="cent" selected>cent</option><option value="acre">acre</option></select></span></label>
+              <label class="field"><span>Price per square foot <span class="optional">(optional)</span></span><span class="input-shell"><span class="input-prefix">₹</span><input id="pricePerSqft" type="number" value="0" min="0" step="0.01" inputmode="decimal" /></span></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Convert area <span>→</span></button><button class="button button-quiet" id="propertyReset" type="button">Reset</button></div>
+              <p class="helper-text">1 cent = 435.6 sq ft · 1 acre = 43,560 sq ft. Local land-unit definitions can vary.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">AREA CONVERSION</span><button class="icon-button" id="copyProperty" type="button" aria-label="Copy property estimate" title="Copy result">⧉</button></div>
+              <p class="result-caption">Area in square feet</p><strong class="big-result" id="propertySqft">435.6 sq ft</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Square yards</span><strong id="propertySqyd">48.4 sq yd</strong></div>
+              <div class="result-line"><span>Cents</span><strong id="propertyCent">1 cent</strong></div>
+              <div class="result-line"><span>Acres</span><strong id="propertyAcre">0.01 acres</strong></div>
+              <div class="property-value"><span>Estimated property value</span><strong id="propertyValue">Enter price per sq ft</strong></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-emi" aria-labelledby="emi-title">
+          <div class="page-heading"><p class="eyebrow">FINANCE AGENT TOOL</p><h1>Loan EMI calculator<span class="title-dot">.</span></h1><p>Estimate a fixed monthly payment for a reducing-balance loan.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="emiForm" novalidate>
+              <div class="panel-title"><span class="mini-icon blue">↗</span><div><h2>Loan details</h2><p>Estimate only; lender fees may differ</p></div></div>
+              <label class="field"><span>Loan amount</span><span class="input-shell"><span class="input-prefix">₹</span><input id="loanAmount" type="number" value="1000000" min="0" step="1000" inputmode="decimal" required /></span></label>
+              <label class="field"><span>Annual interest rate</span><span class="input-shell"><input id="loanRate" type="number" value="9" min="0" max="100" step="0.01" inputmode="decimal" required /><span class="input-suffix">% p.a.</span></span></label>
+              <label class="field"><span>Loan term</span><span class="input-shell"><input id="loanYears" type="number" value="5" min="0" step="1" inputmode="numeric" required /><span class="input-suffix">years</span></span></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Calculate EMI <span>→</span></button><button class="button button-quiet" id="emiReset" type="button">Reset</button></div>
+              <p class="helper-text">Uses monthly payments and a fixed annual rate divided by 12.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">LOAN ESTIMATE</span><button class="icon-button" id="copyEmi" type="button" aria-label="Copy EMI estimate" title="Copy result">⧉</button></div>
+              <p class="result-caption">Estimated monthly EMI</p><strong class="big-result" id="emiMonthly">₹20,758</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Loan amount</span><strong id="emiPrincipal">₹10,00,000</strong></div>
+              <div class="result-line"><span>Total interest</span><strong id="emiInterest">₹2,45,480</strong></div>
+              <div class="result-line"><span>Total repayment</span><strong id="emiTotal">₹12,45,480</strong></div>
+              <div class="result-note"><span>i</span><p>Actual EMI may differ based on lender terms, fees, rate changes, and payment dates.</p></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-more" aria-labelledby="more-title">
+          <div class="page-heading"><p class="eyebrow">EVERYDAY UTILITIES</p><h1 id="more-title">More calculators<span class="title-dot">.</span></h1><p>Handy tools for age, shopping, savings, measurements, and travel.</p></div>
+          <div class="tool-grid more-grid">
+            <button class="tool-card percentage-tool" type="button" data-view-link="percentage">
+              <span class="tool-icon" aria-hidden="true">%</span><span class="tool-tag">MONEY</span>
+              <strong>Percentage calculator</strong><small>Find a percent, share, or price change</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card dates-tool" type="button" data-view-link="dates">
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></span><span class="tool-tag">PLANNING</span>
+              <strong>Date calculator</strong><small>Count days or find a date after a period</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card converter-tool" type="button" data-view-link="converter">
+              <span class="tool-icon" aria-hidden="true">↔</span><span class="tool-tag">CONVERSION</span>
+              <strong>Unit converter</strong><small>Convert length, weight, volume, area, and temperature</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card fuel-tool" type="button" data-view-link="fuel">
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 21V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v17M3 21h14M7 6h6v5H7zM16 8h2l2 2v6a2 2 0 0 0 4 0v-5l-2-2"/></svg></span><span class="tool-tag">TRAVEL</span>
+              <strong>Fuel cost calculator</strong><small>Estimate fuel needed and trip cost</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card age-tool" type="button" data-view-link="age">
+              <span class="tool-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M8 14h.01M12 14h.01M16 14h.01"/></svg></span><span class="tool-tag">LIFE & DATES</span>
+              <strong>Age calculator</strong><small>Find exact age and days until next birthday</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card split-tool" type="button" data-view-link="split">
+              <span class="tool-icon" aria-hidden="true">÷</span><span class="tool-tag">EVERYDAY</span>
+              <strong>Bill split calculator</strong><small>Share a bill evenly, including a tip</small><span class="tool-arrow">↗</span>
+            </button>
+            <button class="tool-card savings-tool" type="button" data-view-link="savings">
+              <span class="tool-icon" aria-hidden="true">₹</span><span class="tool-tag">SAVING</span>
+              <strong>Savings goal planner</strong><small>Plan monthly saving or time to reach a goal</small><span class="tool-arrow">↗</span>
+            </button>
+          </div>
+          <div class="tool-guidance"><strong>Useful for everyday decisions</strong><p>These are quick estimates. Check local rules, measurement standards, and actual prices before relying on a result.</p></div>
+        </section>
+
+        <section class="view" id="view-percentage" aria-labelledby="percentage-title">
+          <div class="page-heading"><p class="eyebrow">MONEY TOOL</p><h1 id="percentage-title">Percentage calculator<span class="title-dot">.</span></h1><p>Work out a portion, compare amounts, or see how much a price changed.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="percentageForm" novalidate>
+              <div class="panel-title"><span class="mini-icon mint">%</span><div><h2>Choose a calculation</h2><p>Useful for prices, marks, and quick comparisons</p></div></div>
+              <label class="field"><span>Calculation</span><span class="input-shell"><select id="percentageMode"><option value="of">Find a percentage of an amount</option><option value="share">What percent is one amount?</option><option value="change">Percentage change between amounts</option></select></span></label>
+              <label class="field"><span id="percentageFirstLabel">Percentage</span><span class="input-shell"><span class="input-prefix" id="percentageFirstPrefix" hidden>₹</span><input id="percentageFirst" type="number" value="15" min="0" step="any" inputmode="decimal" required /><span class="input-suffix" id="percentageFirstSuffix">%</span></span></label>
+              <label class="field"><span id="percentageSecondLabel">Amount</span><span class="input-shell"><span class="input-prefix">₹</span><input id="percentageSecond" type="number" value="2000" min="0" step="any" inputmode="decimal" required /></span></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Calculate <span>→</span></button><button class="button button-quiet" id="percentageReset" type="button">Reset</button></div>
+              <p class="helper-text" id="percentageHelp">Enter a rate and amount to find the value of the percentage.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">PERCENTAGE RESULT</span><button class="icon-button" id="copyPercentage" type="button" aria-label="Copy result" title="Copy result">⧉</button></div>
+              <p class="result-caption" id="percentageResultCaption">Percentage amount</p><strong class="big-result" id="percentageResult">₹300</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span id="percentageDetailLabel">Rate</span><strong id="percentageDetail">15%</strong></div>
+              <div class="result-line"><span id="percentageExtraLabel">Amount</span><strong id="percentageExtra">₹2,000</strong></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-dates" aria-labelledby="dates-title">
+          <div class="page-heading"><p class="eyebrow">PLANNING TOOL</p><h1 id="dates-title">Date calculator<span class="title-dot">.</span></h1><p>Count calendar days between dates or find a date by adding or subtracting days.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="datesForm" novalidate>
+              <div class="panel-title"><span class="mini-icon blue">▦</span><div><h2>Date details</h2><p>Calendar days; the start date is not counted</p></div></div>
+              <label class="field"><span>Calculation</span><span class="input-shell"><select id="dateMode"><option value="difference">Days between two dates</option><option value="offset">Add or subtract days</option></select></span></label>
+              <label class="field"><span>Start date</span><span class="input-shell"><input id="dateStart" type="date" required /></span></label>
+              <label class="field" id="dateEndField"><span>End date</span><span class="input-shell"><input id="dateEnd" type="date" required /></span></label>
+              <label class="field" id="dateOffsetField" hidden><span>Days to add (use a negative number to subtract)</span><span class="input-shell"><input id="dateOffset" type="number" value="30" step="1" inputmode="numeric" /></span></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Calculate <span>→</span></button><button class="button button-quiet" id="datesReset" type="button">Reset</button></div>
+              <p class="helper-text">Useful for due dates, trip planning, and counting the time between events.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">DATE RESULT</span><button class="icon-button" id="copyDates" type="button" aria-label="Copy result" title="Copy result">⧉</button></div>
+              <p class="result-caption" id="dateResultCaption">Elapsed calendar days</p><strong class="big-result" id="dateResult">30 days</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Start date</span><strong id="dateStartResult">—</strong></div>
+              <div class="result-line"><span id="dateEndResultLabel">End date</span><strong id="dateEndResult">—</strong></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-converter" aria-labelledby="converter-title">
+          <div class="page-heading"><p class="eyebrow">CONVERSION TOOL</p><h1 id="converter-title">Unit converter<span class="title-dot">.</span></h1><p>Convert common measurements for home, shopping, and property work.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="converterForm" novalidate>
+              <div class="panel-title"><span class="mini-icon lavender">↔</span><div><h2>Choose measurements</h2><p>Conversions use standard reference factors</p></div></div>
+              <label class="field"><span>Measurement type</span><span class="input-shell"><select id="unitCategory"><option value="length">Length</option><option value="weight">Weight</option><option value="volume">Volume</option><option value="area">Area</option><option value="temperature">Temperature</option></select></span></label>
+              <label class="field"><span>Amount</span><span class="input-shell"><input id="unitAmount" type="number" value="1" step="any" inputmode="decimal" required /></span></label>
+              <div class="field-row">
+                <label class="field"><span>From</span><span class="input-shell"><select id="unitFrom" aria-label="Convert from"></select></span></label>
+                <label class="field"><span>To</span><span class="input-shell"><select id="unitTo" aria-label="Convert to"></select></span></label>
+              </div>
+              <div class="form-actions"><button class="button button-primary" type="submit">Convert <span>→</span></button><button class="button button-quiet" id="converterReset" type="button">Reset</button></div>
+              <p class="helper-text">Temperature conversions use Celsius, Fahrenheit, and Kelvin scales.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">CONVERSION RESULT</span><button class="icon-button" id="copyConversion" type="button" aria-label="Copy result" title="Copy result">⧉</button></div>
+              <p class="result-caption" id="conversionCaption">Converted measurement</p><strong class="big-result" id="conversionResult">1,000 mm</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Original amount</span><strong id="conversionOriginal">1 m</strong></div>
+              <div class="result-line"><span>Measurement type</span><strong id="conversionCategory">Length</strong></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-fuel" aria-labelledby="fuel-title">
+          <div class="page-heading"><p class="eyebrow">TRAVEL TOOL</p><h1 id="fuel-title">Fuel cost calculator<span class="title-dot">.</span></h1><p>Estimate how much fuel a trip needs and its approximate cost.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="fuelForm" novalidate>
+              <div class="panel-title"><span class="mini-icon peach">↗</span><div><h2>Trip details</h2><p>Uses your vehicle’s mileage in kilometres per litre</p></div></div>
+              <label class="field"><span>Distance</span><span class="input-shell"><input id="fuelDistance" type="number" value="100" min="0" step="any" inputmode="decimal" required /><span class="input-suffix">km</span></span></label>
+              <label class="field"><span>Vehicle mileage</span><span class="input-shell"><input id="fuelMileage" type="number" value="15" min="0" step="any" inputmode="decimal" required /><span class="input-suffix">km / L</span></span></label>
+              <label class="field"><span>Fuel price</span><span class="input-shell"><span class="input-prefix">₹</span><input id="fuelPrice" type="number" value="100" min="0" step="any" inputmode="decimal" required /><span class="input-suffix">per litre</span></span></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Estimate trip cost <span>→</span></button><button class="button button-quiet" id="fuelReset" type="button">Reset</button></div>
+              <p class="helper-text">A planning estimate only; actual mileage and fuel use vary with traffic and driving conditions.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">TRIP ESTIMATE</span><button class="icon-button" id="copyFuel" type="button" aria-label="Copy trip estimate" title="Copy result">⧉</button></div>
+              <p class="result-caption">Estimated fuel cost</p><strong class="big-result" id="fuelResult">₹666.67</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Distance</span><strong id="fuelDistanceResult">100 km</strong></div>
+              <div class="result-line"><span>Fuel needed</span><strong id="fuelNeeded">6.67 L</strong></div>
+              <div class="result-line"><span>Estimated cost per km</span><strong id="fuelPerKm">₹6.67</strong></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-age" aria-labelledby="age-title">
+          <div class="page-heading"><p class="eyebrow">LIFE & DATES TOOL</p><h1 id="age-title">Age calculator<span class="title-dot">.</span></h1><p>Find an exact age on a chosen date, plus the time until the next birthday.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="ageForm" novalidate>
+              <div class="panel-title"><span class="mini-icon blue">▦</span><div><h2>Date details</h2><p>Age is calculated using calendar years, months, and days</p></div></div>
+              <label class="field"><span>Date of birth</span><span class="input-shell"><input id="ageBirthDate" type="date" required /></span></label>
+              <label class="field"><span>Calculate age on</span><span class="input-shell"><input id="ageAsOf" type="date" required /></span></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Calculate age <span>→</span></button><button class="button button-quiet" id="ageReset" type="button">Reset</button></div>
+              <p class="helper-text">For a 29 February birthday, the birthday is treated as 28 February in non-leap years.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">AGE RESULT</span><button class="icon-button" id="copyAge" type="button" aria-label="Copy age result" title="Copy result">⧉</button></div>
+              <p class="result-caption">Age on selected date</p><strong class="big-result" id="ageResult">Enter birth date</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Additional days</span><strong id="ageDays">—</strong></div>
+              <div class="result-line"><span>Next birthday</span><strong id="ageNextBirthday">—</strong></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-split" aria-labelledby="split-title">
+          <div class="page-heading"><p class="eyebrow">EVERYDAY TOOL</p><h1 id="split-title">Bill split calculator<span class="title-dot">.</span></h1><p>Work out each person’s share of a bill, with an optional tip.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="splitForm" novalidate>
+              <div class="panel-title"><span class="mini-icon peach">÷</span><div><h2>Bill details</h2><p>Split the total equally between everyone</p></div></div>
+              <label class="field"><span>Bill amount</span><span class="input-shell"><span class="input-prefix">₹</span><input id="splitAmount" type="number" value="2400" min="0" step="any" inputmode="decimal" required /></span></label>
+              <div class="field-row">
+                <label class="field"><span>Number of people</span><span class="input-shell"><input id="splitPeople" type="number" value="4" min="1" step="1" inputmode="numeric" required /></span></label>
+                <label class="field"><span>Tip <span class="optional">(optional)</span></span><span class="input-shell"><input id="splitTip" type="number" value="0" min="0" step="any" inputmode="decimal" /><span class="input-suffix">%</span></span></label>
+              </div>
+              <div class="form-actions"><button class="button button-primary" type="submit">Split bill <span>→</span></button><button class="button button-quiet" id="splitReset" type="button">Reset</button></div>
+              <p class="helper-text">This assumes an equal split. Add discounts or service charges to the bill amount first if needed.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">SHARE PER PERSON</span><button class="icon-button" id="copySplit" type="button" aria-label="Copy bill split" title="Copy result">⧉</button></div>
+              <p class="result-caption">Each person pays</p><strong class="big-result" id="splitPerPerson">₹600</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Bill amount</span><strong id="splitSubtotal">₹2,400</strong></div>
+              <div class="result-line"><span>Total tip</span><strong id="splitTipValue">₹0</strong></div>
+              <div class="result-line"><span>People</span><strong id="splitPeopleResult">4</strong></div>
+              <div class="result-line"><span>Total with tip</span><strong id="splitTotal">₹2,400</strong></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-savings" aria-labelledby="savings-title">
+          <div class="page-heading"><p class="eyebrow">SAVING TOOL</p><h1 id="savings-title">Savings goal planner<span class="title-dot">.</span></h1><p>Plan the regular amount to save or estimate how long a goal may take.</p></div>
+          <div class="calculator-layout">
+            <form class="panel input-panel" id="savingsForm" novalidate>
+              <div class="panel-title"><span class="mini-icon mint">₹</span><div><h2>Set your goal</h2><p>Does not include interest or investment returns</p></div></div>
+              <label class="field"><span>Target amount</span><span class="input-shell"><span class="input-prefix">₹</span><input id="savingsTarget" type="number" value="50000" min="0" step="any" inputmode="decimal" required /></span></label>
+              <label class="field"><span>Already saved</span><span class="input-shell"><span class="input-prefix">₹</span><input id="savingsCurrent" type="number" value="10000" min="0" step="any" inputmode="decimal" required /></span></label>
+              <label class="field"><span>Plan</span><span class="input-shell"><select id="savingsMode"><option value="monthly">Find monthly saving needed</option><option value="time">Estimate time to goal</option></select></span></label>
+              <label class="field" id="savingsMonthsField"><span>Months to reach goal</span><span class="input-shell"><input id="savingsMonths" type="number" value="12" min="1" step="1" inputmode="numeric" required /></span></label>
+              <label class="field" id="savingsMonthlyField" hidden><span>Amount saved each month</span><span class="input-shell"><span class="input-prefix">₹</span><input id="savingsMonthly" type="number" value="5000" min="0" step="any" inputmode="decimal" /></span></label>
+              <div class="form-actions"><button class="button button-primary" type="submit">Plan savings <span>→</span></button><button class="button button-quiet" id="savingsReset" type="button">Reset</button></div>
+              <p class="helper-text" id="savingsHelp">Find the monthly amount needed to reach your goal in the chosen time.</p>
+            </form>
+            <section class="panel result-panel" aria-live="polite">
+              <div class="result-topline"><span class="result-label">SAVINGS PLAN</span><button class="icon-button" id="copySavings" type="button" aria-label="Copy savings plan" title="Copy result">⧉</button></div>
+              <p class="result-caption" id="savingsResultCaption">Save each month</p><strong class="big-result" id="savingsResult">₹3,333.33</strong>
+              <div class="result-divider"></div>
+              <div class="result-line"><span>Target amount</span><strong id="savingsTargetResult">₹50,000</strong></div>
+              <div class="result-line"><span>Remaining amount</span><strong id="savingsRemaining">₹40,000</strong></div>
+              <div class="result-line"><span id="savingsDetailLabel">Timeframe</span><strong id="savingsDetail">12 months</strong></div>
+            </section>
+          </div>
+        </section>
+
+        <button class="floating-back" id="backButton" type="button" aria-label="Go back" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+          <span>Back</span>
+        </button>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </main>
+    </div>
+    <script src="daily-quotes.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
